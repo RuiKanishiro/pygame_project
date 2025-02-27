@@ -290,16 +290,17 @@ while is_running:
         if event.type == pygame.MOUSEBUTTONUP:
             if system.is_show():
                 accessorie = system.catch_click(*event.pos)
-                accessorie.make_it_appropriate(rat)
-                if rat.wearable():
-                    rat.wear(accessorie)
-                    system = SystemWindow(load_image('inventory.png', 'wood'), 300, 150)
-                    system.event_show()
-                else:
-                    rat.forcing()
-                    rat.wear(accessorie)
-                    system = SystemWindow(load_image('inventory.png', 'wood'), 300, 150)
-                    system.event_show()
+                if accessorie is not None:
+                    accessorie.make_it_appropriate(rat)
+                    if rat.wearable():
+                        rat.wear(accessorie)
+                        system = SystemWindow(load_image('inventory.png', 'wood'), 300, 150)
+                        system.event_show()
+                    else:
+                        rat.forcing()
+                        rat.wear(accessorie)
+                        system = SystemWindow(load_image('inventory.png', 'wood'), 300, 150)
+                        system.event_show()
 
     if is_reacting:
         if pygame.key.get_pressed()[K_RIGHT] and rat.get_side() == 'right':
