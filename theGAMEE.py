@@ -143,10 +143,8 @@ def load_level(filename):
 def generate_level(level, filename):
     for i in cur_decor:
         i.kill()
-    for i in vertical_borders:
-        vertical_borders.remove_internal(i)
-    for i in horizontal_borders:
-        horizontal_borders.remove_internal(i)
+    for i in borders_tmp:
+        i.kill()
     Border(-1, -1, width + 1, -1, borders)
     Border(-1, height - 95, width + 1, height - 95, borders)
     Border(-1, -1, -1, height + 1, borders)
