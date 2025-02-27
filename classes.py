@@ -94,7 +94,6 @@ class Border(pygame.sprite.Sprite):
             self.add(horizontal_borders)
             self.image = pygame.Surface([x2 - x1, 1])
             self.rect = pygame.Rect(x1, y1, x2 - x1, 1)
-        group.remove_internal(self)
 
 
 class Decoration(pygame.sprite.Sprite):
@@ -158,17 +157,25 @@ class MainCharacter(pygame.sprite.Sprite):
 
     def move_with_check(self, delta_x: int, delta_y: int):
         self.rect = self.rect.move(delta_x, delta_y)
-        if pygame.sprite.spritecollideany(self, horizontal_borders):
+        if (pygame.sprite.spritecollideany(self, horizontal_borders) and not
+                pygame.sprite.spritecollideany(self, borders_tmp)):
             if delta_y > 0:
                 self.status_y = 1
             else:
                 self.status_y = -1
             self.rect = self.rect.move(0, -delta_y)
-        if pygame.sprite.spritecollideany(self, vertical_borders):
+        elif (pygame.sprite.spritecollideany(self, horizontal_borders) and
+                pygame.sprite.spritecollideany(self, borders_tmp)):
+            self.rect = self.rect.move(0, -delta_y)
+        if (pygame.sprite.spritecollideany(self, vertical_borders) and not
+                pygame.sprite.spritecollideany(self, borders_tmp)):
             if delta_x > 0:
                 self.status_x = 1
             else:
                 self.status_x = -1
+            self.rect = self.rect.move(-delta_x, 0)
+        elif (pygame.sprite.spritecollideany(self, vertical_borders) and
+              pygame.sprite.spritecollideany(self, borders_tmp)):
             self.rect = self.rect.move(-delta_x, 0)
         if pygame.sprite.spritecollideany(self, blocks):
             self.rect = self.rect.move(0, -delta_y)
@@ -348,4 +355,3 @@ class Accessories(pygame.sprite.Sprite):
     def update(self):
         self.cur_frame = (self.cur_frame + 1) % len(self.cur_frames)
         self.image = self.cur_frames[self.cur_frame]
-
